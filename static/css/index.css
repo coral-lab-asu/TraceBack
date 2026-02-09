@@ -1,0 +1,345 @@
+:root {
+  --brand: #9b3d23;
+  --brand-2: #e7a146;
+}
+
+html { scroll-behavior: smooth; }
+
+body {
+  font-family: 'Noto Sans', sans-serif;
+}
+
+
+.footer .icon-link {
+    font-size: 25px;
+    color: #000;
+}
+
+.link-block a {
+    margin-top: 5px;
+    margin-bottom: 5px;
+}
+
+.publication-links .button {
+  margin: 0.25rem;
+}
+
+.dnerf {
+  font-variant: small-caps;
+}
+
+
+.teaser .hero-body {
+  padding-top: 0;
+  padding-bottom: 3rem;
+}
+
+.teaser {
+  font-family: 'Google Sans', sans-serif;
+}
+
+
+.publication-title {
+}
+
+.publication-banner {
+  max-height: parent;
+
+}
+
+.publication-banner video {
+  position: relative;
+  left: auto;
+  top: auto;
+  transform: none;
+  object-fit: fit;
+}
+
+.publication-header .hero-body {
+}
+
+.publication-title {
+    font-family: 'Google Sans', sans-serif;
+}
+
+.publication-authors {
+    font-family: 'Google Sans', sans-serif;
+}
+
+.publication-venue {
+    color: #555;
+    width: fit-content;
+    font-weight: bold;
+}
+
+.publication-awards {
+    color: #ff3860;
+    width: fit-content;
+    font-weight: bolder;
+}
+
+.publication-authors {
+}
+
+.publication-authors a {
+   color: hsl(204, 86%, 53%) !important;
+}
+
+.publication-authors a:hover {
+    text-decoration: underline;
+}
+
+.author-block {
+  display: inline-block;
+}
+
+.publication-banner img {
+}
+
+.publication-authors {
+  /*color: #4286f4;*/
+}
+
+.publication-video {
+    position: relative;
+    width: 100%;
+    height: 0;
+    padding-bottom: 56.25%;
+
+    overflow: hidden;
+    border-radius: 10px !important;
+}
+
+.publication-video iframe {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+}
+
+/* Fancy layout additions */
+.brand-hero {
+  background: linear-gradient(135deg, var(--brand) 0%, #c46635 56%, var(--brand-2) 100%);
+  color: #fff;
+}
+.brand-hero .title,
+.brand-hero .subtitle {
+  color: #fff;
+}
+
+/* Ensure high-contrast author links on hero */
+.brand-hero .publication-authors { color: rgba(255,255,255,0.92); }
+.brand-hero .publication-authors a { color: #ffffff !important; }
+.brand-hero .publication-authors a:hover { text-decoration: underline; }
+
+.section { padding-top: 3rem; padding-bottom: 3rem; }
+
+.section .title.is-3 {
+  position: relative;
+  padding-bottom: 0.5rem;
+  margin-bottom: 1.5rem;
+}
+.section .title.is-3::after {
+  content: '';
+  position: absolute;
+  left: 0;
+  bottom: 0;
+  width: 64px;
+  height: 4px;
+  border-radius: 2px;
+  background: linear-gradient(90deg, var(--brand), var(--brand-2));
+}
+
+.box.elevated {
+  border-radius: 12px;
+  box-shadow: 0 10px 24px rgba(0,0,0,0.08), 0 2px 6px rgba(0,0,0,0.06);
+}
+
+.media-caption { color: #6b7280; margin-top: .5rem; }
+
+.placeholder {
+  border: 2px dashed #cbd5e1;
+  background: #f8fafc;
+  color: #64748b;
+  border-radius: 8px;
+  padding: 1rem;
+  font-style: italic;
+}
+
+.button.is-brand {
+  background: linear-gradient(135deg, #b5522b, #e7a146);
+  border: 0;
+  color: #fff;
+}
+.button.is-brand:hover {
+  filter: brightness(0.95);
+}
+
+.footer { border-top: 1px solid #eee; }
+
+.back-to-top {
+  position: fixed;
+  right: 20px;
+  bottom: 24px;
+  z-index: 5;
+  display: none;
+}
+
+.publication-body img {
+}
+
+.results-carousel {
+  overflow: hidden;
+}
+
+.results-carousel .item {
+  margin: 5px;
+  overflow: hidden;
+  border: 1px solid #bbb;
+  border-radius: 10px;
+  padding: 0;
+  font-size: 0;
+}
+
+.results-carousel video {
+  margin: 0;
+}
+
+
+.interpolation-panel {
+  background: #f5f5f5;
+  border-radius: 10px;
+}
+
+.interpolation-panel .interpolation-image {
+  width: 100%;
+  border-radius: 5px;
+}
+
+.interpolation-video-column {
+}
+
+.interpolation-panel .slider {
+  margin: 0 !important;
+}
+
+.interpolation-panel .slider {
+  margin: 0 !important;
+}
+
+#interpolation-image-wrapper {
+  width: 100%;
+}
+#interpolation-image-wrapper img {
+  border-radius: 5px;
+}
+
+.traceback-example-card .title {
+  margin-bottom: 1rem;
+}
+
+.traceback-mini-table th {
+  background: #0f6e8b;
+  color: #fff;
+}
+
+.traceback-mini-table td,
+.traceback-mini-table th {
+  text-align: center;
+  vertical-align: middle;
+}
+
+.traceback-mini-table .hl-source { background: #fff1cc; }
+.traceback-mini-table .hl-cost { background: #ffdfe1; }
+.traceback-mini-table .hl-eff { background: #e4e2ff; }
+.traceback-mini-table .hl-scale { background: #daf4db; }
+
+.reason-step {
+  font-weight: 700;
+  padding: 0.1rem 0.35rem;
+  border-radius: 6px;
+  white-space: nowrap;
+}
+
+.step-1 { color: #cc2e2e; background: #ffe5e5; }
+.step-2 { color: #20752d; background: #e4f7e6; }
+.step-3 { color: #2548c4; background: #e4e9ff; }
+
+.traceback-tags .tag {
+  margin-right: 0.35rem;
+  margin-bottom: 0.35rem;
+}
+
+.trace-tag-1 { background: #ffe5e5 !important; color: #8d1d1d !important; }
+.trace-tag-2 { background: #e4f7e6 !important; color: #1a6125 !important; }
+.trace-tag-3 { background: #e4e9ff !important; color: #1e3b9a !important; }
+
+.results-full-table {
+  font-size: 0.92rem;
+}
+
+.results-full-table th,
+.results-full-table td {
+  text-align: center;
+  vertical-align: middle;
+}
+
+.results-full-table th:first-child,
+.results-full-table td:first-child {
+  text-align: left;
+  white-space: nowrap;
+}
+
+.results-full-table .level-row {
+  font-weight: 700;
+  text-align: center !important;
+}
+
+.results-full-table .row-level { background: #e6ffe6; }
+.results-full-table .column-level { background: #def6fc; }
+.results-full-table .cell-level { background: #fae4ca; }
+
+.results-full-table .traceback-main-row {
+  background: #d1f7d1;
+}
+
+.ablation-table {
+  font-size: 0.9rem;
+}
+
+.ablation-table th,
+.ablation-table td {
+  text-align: center;
+  vertical-align: middle;
+}
+
+.ablation-table th:first-child,
+.ablation-table td:first-child {
+  text-align: left;
+  white-space: normal;
+}
+
+.ablation-table .ablation-group {
+  background: #f5f7fb;
+  font-weight: 700;
+  text-align: center !important;
+}
+
+.ablation-table .ablation-main-row {
+  background: #edf9ef;
+}
+
+@media screen and (max-width: 768px) {
+  .traceback-example-card .table {
+    font-size: 0.92rem;
+  }
+
+  .results-full-table {
+    font-size: 0.82rem;
+  }
+
+  .ablation-table {
+    font-size: 0.8rem;
+  }
+}
