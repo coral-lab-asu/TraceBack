@@ -1,0 +1,28 @@
+Find the number of atomic facts in set-1, which are covered by atomic facts in set-2 given the question, table title and the Table columns. Also, find the number of atomic facts in set-2, which are completely unecessary to construct the atomic facts in set-1. Don't use Program of Thought or Program Aided Language. Use reasoning to determine the above.
+
+Example:
+Set-1:
+1. Pooja Ramachandran starred in the movie Kadhalil Sodhappuvadhu Yeppadi.
+2. Pooja Ramachandran starred as Cathy in the Telugu version of the film, Love Failure.
+
+Set-2:
+1. The title of the film is Kadhalil Sodhappuvadhu Yeppadi.
+2. The role played in Kadhalil Sodhappuvadhu Yeppadi is Cathy.
+3. The title of the film is Love Failure.
+4. The role played in Love Failure is Cathy.
+5. The language of the film Love Failure is Telugu.
+
+"question": "In what films did Pooja Ramachandran play Cathy?"
+"Table Columns" : ["Year", "Film", "Role", "Language", "Notes"]
+"table_page_title": "Pooja Ramachandran"
+
+<Output>:
+Total Number of facts in Set-1 : 2
+Total number of facts in Set-2 : 5
+Number of atomic facts in 1 covered by 2: 2
+Number of atomic facts in 2 that are unnecessary: 0
+
+Instructions:
+1. Follow the above format to give the answer. 
+2. Always start your final response after <Output> tag.
+3. Just give the final response and nothing else.

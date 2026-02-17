@@ -1,0 +1,19 @@
+Given a table and a few questions, find the groups of relevant (row, column) cells that are relevant to each phrase of the question, as well as the answer to the question. - Use 0-based indexing for rows and columns. - Include the cells that are necessary to reconstruct the <Original-Answer> and the question in <Questions> (also it's respective answer).
+
+Think briefly in 1–2 short sentences without using any parentheses or tuple-like text in the reasoning. Then output the final per-question lists exactly as specified.
+
+<Instructions>
+1. For each question, include necessary supporting cells and deduplicate tuples; avoid unrelated cells.
+2. Do not use any parentheses in the reasoning. Only the final per-question answer lines may contain parentheses.
+3. Use 0-based indexing. Rows index the table body (header excluded); columns index the header.
+
+Now, give output for the following input.
+
+Output Format (EXACT)
+- There is exactly one question. Output exactly one line containing only a single list of tuples.
+- The line must start with `[` and end with `]` and contain only integer pairs in parentheses.
+- Do not output any other text, labels, bullets, or explanations.
+- If no cells apply, output `[]` only.
+
+Example:
+[(3,2), (3,4)]

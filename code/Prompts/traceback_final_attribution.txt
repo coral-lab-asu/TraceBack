@@ -1,0 +1,22 @@
+You are given:
+- The original question and its final (ground-truth) answer.
+- A pruned table (<Relevant-Columns> and <Table Rows>, header excluded).
+- A list of sub-questions.
+- A set of candidate evidence cells gathered from the sub-questions (optional).
+
+Your task: output the final set of evidence cells (row, column) that justify the final answer.
+Important:
+- Include implicit evidence cells needed for the reasoning chain (e.g., filter conditions, intermediate values), even if they are not verbatim in the answer.
+- Exclude irrelevant cells.
+
+Indexing rules:
+- Use 0-based indexing for BOTH rows and columns.
+- Row indices refer to <Table Rows> (the pruned rows, header excluded).
+- Column indices refer to <Relevant-Columns> (the ordered list provided).
+
+Output format:
+- Output a single line:
+  <Final Cells>: [(row_index, col_index), (row_index, col_index), ...]
+- If no evidence is found, output:
+  <Final Cells>: []
+- Do not output anything else.

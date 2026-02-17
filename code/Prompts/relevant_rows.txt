@@ -1,0 +1,35 @@
+Given a table schema and other table meta-data, question based on table and answer for the question, write a MySQL query
+to retrieve all the relevant rows of the table, such that the answer to the given question can be generated from the
+retrieved rows. Your focus should be to not eliminate any relevant rows from the table. Think step-by-step.
+
+Important MySQL formatting rules:
+- Use backticks (`...`) around table names and column names (identifiers), especially if they contain spaces or punctuation.
+- Put ONLY the SQL inside the <SQL> ... </SQL> tags (do not add a leading colon after <SQL>).
+
+<Example-1> : 
+
+Input :
+Table-Schema :
+<Column Names>: ["King Name", "Start of the Reign", "End of the Reign", "Duration"]
+<Table Title>: "Kings_Time_Duration_Info"
+<Table-Rows> : [["Bhopal","Devanshu","1901","1998","98 Years"],["Chennai","Poojah","1999","2100","101"],["Ujjain","Rajat","2111","2211","100"]]
+
+Question : "How long did king Poojah held the throne and who was his successor?"
+Answer : "King Poojah held the throne for 101 years and King Rajat was his successor." 
+
+Output :
+<step-by-step reasoning>
+1. In the question, the duration and the successor is asked for King Poojah.
+2. In the answer, duration of King Poojah is mentioned along with the sucessor to King Poojah - King Rajat.
+3. The SQL query will be such that it retrieves the row of King Poojah and all the rows that has the "Start of the Reign" >= 2100 ("End of the Reign" for King Poojah).
+Final Answer : 
+<SQL> CREATE TABLE Pooja_King AS SELECT * FROM `Kings_Time_Duration_Info` WHERE `King Name` = 'Poojah' OR CAST(`Start of the Reign` AS SIGNED) >= 2100; </SQL>
+</Example-1>
+
+<Instructions>
+1. Follow the given format for the final answer. The final SQL query should be between <SQL> </SQL> tags.
+2. Only write CREATE MySQL statements.
+3. Give a SQL statement for MySQL.
+4. The query giving the filtered table should cover all parts of the question and answer.
+
+Now, give output for the following input.

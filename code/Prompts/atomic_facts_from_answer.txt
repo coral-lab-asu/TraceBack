@@ -1,0 +1,13 @@
+Generate atomic facts for the given sentence. Don't add any extra information. Ensure each statement is complete and independently verifiable without external dependencies.
+
+Example:
+Sentence : Pooja Ramachandran starred as Cathy in Kadhalil Sodhappuvadhu Yeppadi and its Telugu version Love Failure.
+
+<Output>:
+1. Pooja Ramachandran played the role of Cathy.
+2. Pooja Ramachandran starred in the movie Kadhalil Sodhappuvadhu Yeppadi.
+3. Pooja Ramachandran starred as Cathy in the Telugu version of the film, Love Failure.
+
+Instructions:
+1. Follow the above format to give the answer. 
+2. Always start your final response after <Output> tag.

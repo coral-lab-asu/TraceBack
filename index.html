@@ -1,8 +1,10 @@
 <!DOCTYPE html>
 <html>
+
 <head>
   <meta charset="utf-8">
-  <meta name="description" content="TraceBack is a multi-agent framework for fine-grained table attribution in QA. It traces answers back to supporting cells, introduces the CITEBENCH benchmark, and evaluates attribution with the reference-less FairScore metric.">
+  <meta name="description"
+    content="TraceBack is a multi-agent framework for fine-grained table attribution in QA. It traces answers back to supporting cells, introduces the CITEBENCH benchmark, and evaluates attribution with the reference-less FairScore metric.">
   <meta name="keywords" content="TraceBack, table QA, attribution, CITEBENCH, FairScore, explainability, LLM">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>TraceBack</title>
@@ -22,608 +24,635 @@
   <script src="./static/js/bulma-slider.min.js"></script>
   <script src="./static/js/index.js"></script>
 </head>
+
 <body id="top">
 
-<section class="hero is-medium brand-hero">
-  <div class="hero-body">
-    <div class="container is-max-desktop">
-      <div class="columns is-centered">
-        <div class="column has-text-centered">
-          <h1 class="title is-1 publication-title">TraceBack</h1>
-          <p class="subtitle is-4">Multi-Agent Decomposition for Fine-Grained Table Attribution</p>
-          <div class="is-size-5 publication-authors">
-            <span class="author-block"><a href="https://tejasanvekar.github.io/">Tejas Anvekar</a>,</span>
-            <span class="author-block"><a href="https://scholar.google.com/citations?user=V0MIWJYAAAAJ">Junha Park</a>,</span>
-            <span class="author-block"><a href="https://scholar.google.com/citations?user=iis1JJsAAAAJ&hl=en">Rajat Jha</a>,</span>
-            <span class="author-block"><a href="https://www.linkedin.com/in/devanshu0gupta/">Devanshu Gupta</a>,</span>
-            <span class="author-block"><a href="https://scholar.google.com/citations?user=anWcj_AAAAAJ&hl=en">Poojah Ganesan</a>,</span>
-            <span class="author-block"><a href="https://themadaiguy.github.io/">Puneeth Mathur</a>,</span>
-            <span class="author-block"><a href="https://vgupta123.github.io/">Vivek Gupta</a></span>
-          </div>
-
+  <section class="hero is-medium brand-hero">
+    <div class="hero-body">
+      <div class="container is-max-desktop">
+        <div class="columns is-centered">
           <div class="column has-text-centered">
-            <div class="publication-links">
-              <span class="link-block">
-                <a href="./Traceback_TACL.pdf" class="external-link button is-normal is-rounded is-brand">
-                  <span class="icon"><i class="fas fa-file-pdf"></i></span>
-                  <span>Paper</span>
-                </a>
-              </span>
-              <span class="link-block">
-                <a href="https://github.com/CoRAL-ASU/TraceBack" class="external-link button is-normal is-rounded is-brand">
-                  <span class="icon"><i class="fab fa-github"></i></span>
-                  <span>code</span>
-                </a>
-              </span>
-              <!-- <span class="link-block">
+            <h1 class="title is-1 publication-title">TraceBack</h1>
+            <p class="subtitle is-4">Multi-Agent Decomposition for Fine-Grained Table Attribution</p>
+            <div class="is-size-5 publication-authors">
+              <span class="author-block"><a href="https://tejasanvekar.github.io/">Tejas Anvekar</a>,</span>
+              <span class="author-block"><a href="https://scholar.google.com/citations?user=V0MIWJYAAAAJ">Junha
+                  Park</a>,</span>
+              <span class="author-block"><a href="https://scholar.google.com/citations?user=iis1JJsAAAAJ&hl=en">Rajat
+                  Jha</a>,</span>
+              <span class="author-block"><a href="https://www.linkedin.com/in/devanshu0gupta/">Devanshu
+                  Gupta</a>,</span>
+              <span class="author-block"><a href="https://scholar.google.com/citations?user=anWcj_AAAAAJ&hl=en">Poojah
+                  Ganesan</a>,</span>
+              <span class="author-block"><a href="https://themadaiguy.github.io/">Puneeth Mathur</a>,</span>
+              <span class="author-block"><a href="https://vgupta123.github.io/">Vivek Gupta</a></span>
+            </div>
+
+            <div class="column has-text-centered">
+              <div class="publication-links">
+                <span class="link-block">
+                  <a href="https://arxiv.org/abs/2602.13059" class="external-link button is-normal is-rounded is-brand">
+                    <span class="icon"><i class="fas fa-file-pdf"></i></span>
+                    <span>Paper</span>
+                  </a>
+                </span>
+                <span class="link-block">
+                  <a href="https://github.com/coral-lab-asu/TraceBack/tree/main"
+                    class="external-link button is-normal is-rounded is-brand">
+                    <span class="icon"><i class="fab fa-github"></i></span>
+                    <span>code</span>
+                  </a>
+                </span>
+                <!-- <span class="link-block">
                 <a href="#fairscore" class="external-link button is-normal is-rounded is-brand">
                   <span class="icon"><i class="fas fa-chart-line"></i></span>
                   <span>Evaluation</span>
                 </a>
               </span> -->
+              </div>
             </div>
           </div>
         </div>
       </div>
     </div>
-  </div>
-</section>
+  </section>
 
-<section class="section" id="motivation">
-  <div class="container is-max-desktop">
-    <div class="columns is-centered has-text-centered">
-      <div class="column is-four-fifths">
-        <h2 class="title is-3">Why Do Correct Answers Still Feel Untrustworthy in Table QA?</h2>
-        <div class="box elevated content has-text-justified">
-          <p>
-            In table question answering, getting the final answer right is only part of the story. In many real settings, we also need to verify <strong>which cells</strong> were actually used.
-            Without this evidence trail, even accurate answers remain hard to trust.
-          </p>
-          <p>
-            TraceBack addresses this gap by tracing each answer back to supporting cells, including both explicit evidence and intermediate cells that appear in multi-step reasoning.
-            This makes attribution more transparent at the cell level rather than only at coarse row or column granularity.
-          </p>
-        </div>
-      </div>
-    </div>
-
-    <div class="box elevated content traceback-example-card">
-      <h4 class="title is-5">A Concrete Example of Step-by-Step Cell Attribution</h4>
-      <div class="table-container">
-        <table class="table is-bordered is-fullwidth traceback-mini-table">
-          <thead>
-            <tr>
-              <th>Source</th>
-              <th>Cost</th>
-              <th>Efficiency</th>
-              <th>Scalability</th>
-            </tr>
-          </thead>
-          <tbody>
-            <tr>
-              <td>Solar Power</td>
-              <td class="hl-cost">30-50</td>
-              <td>15-20</td>
-              <td>4</td>
-            </tr>
-            <tr>
-              <td class="hl-source">Wind Power</td>
-              <td class="hl-cost">20-40</td>
-              <td class="hl-eff">30-45</td>
-              <td class="hl-scale">5</td>
-            </tr>
-            <tr>
-              <td>Hydropower</td>
-              <td>40-70</td>
-              <td>70-90</td>
-              <td>3</td>
-            </tr>
-            <tr>
-              <td>Geothermal</td>
-              <td>50-80</td>
-              <td>90+</td>
-              <td>2</td>
-            </tr>
-          </tbody>
-        </table>
-      </div>
-
-      <p><strong>Question:</strong> Among renewable sources costing &le; 50/MWh and scalability &ge; 3, which is most efficient, and what is its efficiency?</p>
-      <p>
-        <strong>Reasoning:</strong>
-        <span class="reason-step step-1">Step 1: Cost Filter</span> &rarr; Keep Solar, Wind.
-        <span class="reason-step step-2">Step 2: Scalability Filter</span> &rarr; Keep Solar, Wind.
-        <span class="reason-step step-3">Step 3: Efficiency Selection</span> &rarr; Choose Wind (30-45%).
-      </p>
-      <p class="traceback-tags">
-        <span class="tag trace-tag-1">S1: Cost &le; 50</span>
-        <span class="tag trace-tag-2">S2: Scalability &ge; 3</span>
-        <span class="tag trace-tag-3">S3: Max Efficiency</span>
-      </p>
-      <p><strong>Answer:</strong> Wind Power, 30-45% efficiency.</p>
-    </div>
-  </div>
-</section>
-
-<section class="section" id="approach">
-  <div class="container is-max-desktop">
-    <h2 class="title is-3">How Does TraceBack Reconstruct a Reasoning Chain Step by Step?</h2>
-    <div class="content has-text-justified">
-      <p>
-        Rather than attributing evidence in one shot, TraceBack decomposes the attribution process into coordinated agent steps so each stage remains interpretable and scalable.
-      </p>
-    </div>
-
-    <div class="box elevated content">
-      <ol>
-        <li><strong>Column relevance identification:</strong> find columns needed for the answer, including implicit columns for intermediate reasoning.</li>
-        <li><strong>Evidence span extraction:</strong> prune the table to rows that still preserve the reasoning path.</li>
-        <li><strong>Query decomposition:</strong> split the original question into sub-questions aligned with intermediate steps.</li>
-        <li><strong>Sub-query attribution:</strong> map each sub-question to minimal evidence cells.</li>
-        <li><strong>Final attribution:</strong> merge evidence into a coherent final set of supporting cells.</li>
-      </ol>
-    </div>
-
-    <div class="box elevated content has-text-centered">
-      <img src="./static/images/traceback_pipeline_clean.png" alt="TraceBack multi-agent pipeline" style="max-width: 520px; width: 100%;" />
-      <p class="media-caption">
-        Pipeline overview: a modular attribution workflow from relevant schema discovery to final cell-level grounding.
-      </p>
-    </div>
-  </div>
-</section>
-
-<section class="section" id="benchmark">
-  <div class="container is-max-desktop">
-    <h2 class="title is-3">How Was the Benchmark Designed for Fine-Grained Attribution?</h2>
-    <div class="content has-text-justified">
-      <p>
-        To evaluate attribution quality systematically, TraceBack introduces <strong>CITEBENCH</strong>, combining manual phrase-to-cell annotations with larger silver subsets.
-        The benchmark is built from ToTTo, FetaQA, and AITQA, with a 1,500-example gold set for precise analysis.
-      </p>
-    </div>
-
-    <div class="box elevated content has-text-centered">
-      <div class="level">
-        <div class="level-item has-text-centered">
-          <div>
-            <p class="heading">Gold Examples</p>
-            <p class="title">1,500</p>
-          </div>
-        </div>
-        <div class="level-item has-text-centered">
-          <div>
-            <p class="heading">Datasets</p>
-            <p class="title">3</p>
-          </div>
-        </div>
-        <div class="level-item has-text-centered">
-          <div>
-            <p class="heading">IAA (Cohen's kappa)</p>
-            <p class="title">0.72</p>
+  <section class="section" id="motivation">
+    <div class="container is-max-desktop">
+      <div class="columns is-centered has-text-centered">
+        <div class="column is-four-fifths">
+          <h2 class="title is-3">Why Do Correct Answers Still Feel Untrustworthy in Table QA?</h2>
+          <div class="box elevated content has-text-justified">
+            <p>
+              In table question answering, getting the final answer right is only part of the story. In many real
+              settings, we also need to verify <strong>which cells</strong> were actually used.
+              Without this evidence trail, even accurate answers remain hard to trust.
+            </p>
+            <p>
+              TraceBack addresses this gap by tracing each answer back to supporting cells, including both explicit
+              evidence and intermediate cells that appear in multi-step reasoning.
+              This makes attribution more transparent at the cell level rather than only at coarse row or column
+              granularity.
+            </p>
           </div>
         </div>
       </div>
-    </div>
 
-    <div class="box elevated content" style="margin-top: 2rem;">
-      <h4 class="title is-4 has-text-centered">Benchmark Composition</h4>
-      <div class="table-container">
-        <table class="table is-bordered is-striped is-hoverable is-fullwidth">
-          <thead>
-            <tr>
-              <th>Dataset</th>
-              <th>Total</th>
-              <th>Gold Set (Human)</th>
-              <th>Silver Set (Original)</th>
-            </tr>
-          </thead>
-          <tbody>
-            <tr>
-              <td><strong>ToTTo</strong></td>
-              <td>7,700</td>
-              <td>500</td>
-              <td>7,200</td>
-            </tr>
-            <tr>
-              <td><strong>FetaQA</strong></td>
-              <td>3,004</td>
-              <td>500</td>
-              <td>2,504</td>
-            </tr>
-            <tr>
-              <td><strong>AITQA</strong></td>
-              <td>513</td>
-              <td>513</td>
-              <td>-</td>
-            </tr>
-          </tbody>
-        </table>
-      </div>
-      <p class="media-caption">
-        CITEBENCH statistics reported in the paper (Table 2).
-      </p>
-    </div>
-  </div>
-</section>
+      <div class="box elevated content traceback-example-card">
+        <h4 class="title is-5">A Concrete Example of Step-by-Step Cell Attribution</h4>
+        <div class="table-container">
+          <table class="table is-bordered is-fullwidth traceback-mini-table">
+            <thead>
+              <tr>
+                <th>Source</th>
+                <th>Cost</th>
+                <th>Efficiency</th>
+                <th>Scalability</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>Solar Power</td>
+                <td class="hl-cost">30-50</td>
+                <td>15-20</td>
+                <td>4</td>
+              </tr>
+              <tr>
+                <td class="hl-source">Wind Power</td>
+                <td class="hl-cost">20-40</td>
+                <td class="hl-eff">30-45</td>
+                <td class="hl-scale">5</td>
+              </tr>
+              <tr>
+                <td>Hydropower</td>
+                <td>40-70</td>
+                <td>70-90</td>
+                <td>3</td>
+              </tr>
+              <tr>
+                <td>Geothermal</td>
+                <td>50-80</td>
+                <td>90+</td>
+                <td>2</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
 
-<section class="section" id="results">
-  <div class="container is-max-desktop">
-    <h2 class="title is-3">What Do the Experiments Reveal About Attribution Quality?</h2>
-    <div class="content has-text-justified">
-      <p>
-        Across ToTTo, FetaQA, and AITQA, the paper reports attribution quality at row, column, and cell levels.
-        Viewing all three granularities together reveals how each method behaves from coarse evidence localization to fine-grained grounding.
-      </p>
-    </div>
-
-    <div class="box elevated content has-text-centered">
-      <h3 class="title is-4">Attribution performance across granularities and datasets</h3>
-      <div class="table-container">
-        <table class="table is-bordered is-striped is-hoverable is-fullwidth results-full-table">
-          <thead>
-            <tr>
-              <th>Method</th>
-              <th>ToTTo<br>Precision</th>
-              <th>ToTTo<br>Recall</th>
-              <th>FetaQA<br>Precision</th>
-              <th>FetaQA<br>Recall</th>
-              <th>AITQA<br>Precision</th>
-              <th>AITQA<br>Recall</th>
-            </tr>
-          </thead>
-          <tbody>
-            <tr>
-              <td colspan="7" class="level-row row-level"><em>Row-Level Attribution</em></td>
-            </tr>
-            <tr>
-              <td>SBERT + GPT-4o</td>
-              <td>43.38</td>
-              <td>39.09</td>
-              <td>57.02</td>
-              <td>55.40</td>
-              <td>66.82</td>
-              <td>68.10</td>
-            </tr>
-            <tr>
-              <td>GenerationPrograms</td>
-              <td>50.00</td>
-              <td>31.28</td>
-              <td>75.00</td>
-              <td>40.06</td>
-              <td>59.68</td>
-              <td>71.90</td>
-            </tr>
-            <tr>
-              <td>Fewshot + CoT</td>
-              <td>17.30</td>
-              <td>12.80</td>
-              <td>34.40</td>
-              <td>30.10</td>
-              <td>04.30</td>
-              <td>04.30</td>
-            </tr>
-            <tr>
-              <td>INSEQ</td>
-              <td>37.50</td>
-              <td><u>74.50</u></td>
-              <td>56.40</td>
-              <td><u>84.70</u></td>
-              <td>31.20</td>
-              <td><strong>97.60</strong></td>
-            </tr>
-            <tr>
-              <td>TraceBack - Lite</td>
-              <td><strong>77.00</strong></td>
-              <td>62.60</td>
-              <td><u>83.00</u></td>
-              <td>79.20</td>
-              <td><u>91.30</u></td>
-              <td>92.90</td>
-            </tr>
-            <tr>
-              <td><strong>TraceBack</strong></td>
-              <td><u>71.19</u></td>
-              <td><strong>80.38</strong></td>
-              <td><strong>94.30</strong></td>
-              <td><strong>93.36</strong></td>
-              <td><strong>96.65</strong></td>
-              <td><u>97.12</u></td>
-            </tr>
-
-            <tr>
-              <td colspan="7" class="level-row column-level"><em>Column-Level Attribution</em></td>
-            </tr>
-            <tr>
-              <td>SBERT + GPT-4o</td>
-              <td>90.51</td>
-              <td><strong>85.91</strong></td>
-              <td>94.67</td>
-              <td><strong>84.77</strong></td>
-              <td>46.68</td>
-              <td>97.14</td>
-            </tr>
-            <tr>
-              <td>GenerationPrograms</td>
-              <td>71.81</td>
-              <td>24.71</td>
-              <td>78.42</td>
-              <td>20.00</td>
-              <td>49.86</td>
-              <td>83.81</td>
-            </tr>
-            <tr>
-              <td>Fewshot + CoT</td>
-              <td><strong>92.70</strong></td>
-              <td>76.40</td>
-              <td>95.80</td>
-              <td>67.30</td>
-              <td>47.50</td>
-              <td>94.30</td>
-            </tr>
-            <tr>
-              <td>INSEQ</td>
-              <td>73.10</td>
-              <td>74.10</td>
-              <td>82.60</td>
-              <td>65.50</td>
-              <td>34.70</td>
-              <td><strong>99.98</strong></td>
-            </tr>
-            <tr>
-              <td>TraceBack - Lite</td>
-              <td>88.60</td>
-              <td>48.90</td>
-              <td><u>94.70</u></td>
-              <td>54.80</td>
-              <td><strong>79.20</strong></td>
-              <td>85.30</td>
-            </tr>
-            <tr>
-              <td><strong>TraceBack</strong></td>
-              <td><u>91.50</u></td>
-              <td><u>77.64</u></td>
-              <td><strong>96.39</strong></td>
-              <td><u>83.07</u></td>
-              <td><u>54.09</u></td>
-              <td><u>98.09</u></td>
-            </tr>
-
-            <tr>
-              <td colspan="7" class="level-row cell-level"><em>Cell-Level Attribution</em></td>
-            </tr>
-            <tr>
-              <td>SBERT + GPT-4o</td>
-              <td>39.78</td>
-              <td>36.97</td>
-              <td>52.08</td>
-              <td>46.16</td>
-              <td>31.96</td>
-              <td>66.67</td>
-            </tr>
-            <tr>
-              <td>GenerationPrograms</td>
-              <td>29.35</td>
-              <td>13.61</td>
-              <td>50.78</td>
-              <td>15.74</td>
-              <td>30.32</td>
-              <td>67.14</td>
-            </tr>
-            <tr>
-              <td>Fewshot + CoT</td>
-              <td>14.50</td>
-              <td>10.10</td>
-              <td>27.40</td>
-              <td>17.80</td>
-              <td>02.20</td>
-              <td>04.30</td>
-            </tr>
-            <tr>
-              <td>INSEQ</td>
-              <td>42.70</td>
-              <td><u>53.80</u></td>
-              <td>56.50</td>
-              <td><u>44.20</u></td>
-              <td>19.20</td>
-              <td><strong>97.10</strong></td>
-            </tr>
-            <tr>
-              <td>TraceBack - Lite</td>
-              <td><u>73.80</u></td>
-              <td>39.60</td>
-              <td><u>75.40</u></td>
-              <td>42.30</td>
-              <td><strong>73.70</strong></td>
-              <td>80.60</td>
-            </tr>
-            <tr>
-              <td><strong>TraceBack</strong></td>
-              <td><strong>74.20</strong></td>
-              <td><strong>67.05</strong></td>
-              <td><strong>89.81</strong></td>
-              <td><strong>78.84</strong></td>
-              <td><u>52.37</u></td>
-              <td><u>95.22</u></td>
-            </tr>
-          </tbody>
-        </table>
-      </div>
-      <p class="media-caption">
-        Precision and recall for row-, column-, and cell-level attribution on ToTTo, FetaQA, and AITQA. Blocks correspond to different granularities. For each dataset–granularity pair, bold best method; underline marks second best.
-      </p>
-    </div>
-
-    <div class="box elevated content">
-      <h4 class="title is-4">What Changes When We Simplify TraceBack?</h4>
-      <p>
-        Removing query decomposition produces the largest quality drop, which suggests that surfacing intermediate reasoning steps is central to accurate cell-level grounding.
-        Table pruning also matters: it typically reduces noise and improves attribution efficiency while preserving evidence coverage.
-      </p>
-      <div class="table-container" style="margin-top: 1rem;">
-        <table class="table is-bordered is-striped is-hoverable is-fullwidth ablation-table">
-          <thead>
-            <tr>
-              <th>Method</th>
-              <th>ToTTo<br>Precision</th>
-              <th>ToTTo<br>Recall</th>
-              <th>FetaQA<br>Precision</th>
-              <th>FetaQA<br>Recall</th>
-              <th>AITQA<br>Precision</th>
-              <th>AITQA<br>Recall</th>
-            </tr>
-          </thead>
-          <tbody>
-            <tr>
-              <td colspan="7" class="ablation-group"><em>Variants of TraceBack</em></td>
-            </tr>
-            <tr>
-              <td>Query Decomposition before Table Pruning</td>
-              <td>63.00</td>
-              <td>60.15</td>
-              <td>71.23</td>
-              <td>75.10</td>
-              <td>85.38</td>
-              <td>92.89</td>
-            </tr>
-            <tr>
-              <td>Passing One Subquery at a Time</td>
-              <td>61.32</td>
-              <td>60.10</td>
-              <td>69.67</td>
-              <td>73.33</td>
-              <td><strong>85.95</strong></td>
-              <td>92.00</td>
-            </tr>
-            <tr class="ablation-main-row">
-              <td><strong>TraceBack</strong></td>
-              <td><strong>74.20</strong></td>
-              <td><strong>67.05</strong></td>
-              <td><strong>89.81</strong></td>
-              <td><strong>78.84</strong></td>
-              <td>52.37</td>
-              <td><strong>95.22</strong></td>
-            </tr>
-            <tr>
-              <td colspan="7" class="ablation-group"><em>Ablation Study on TraceBack</em></td>
-            </tr>
-            <tr class="ablation-main-row">
-              <td><strong>TraceBack</strong></td>
-              <td><strong>74.20</strong></td>
-              <td><strong>67.05</strong></td>
-              <td><strong>89.81</strong></td>
-              <td><strong>78.84</strong></td>
-              <td>52.37</td>
-              <td><strong>95.22</strong></td>
-            </tr>
-            <tr>
-              <td>- w/o Table Pruning</td>
-              <td>73.14</td>
-              <td>60.10</td>
-              <td>72.89</td>
-              <td>75.78</td>
-              <td><strong>86.33</strong></td>
-              <td>93.10</td>
-            </tr>
-            <tr>
-              <td>- w/o Query Decomposition</td>
-              <td>56.00</td>
-              <td>56.30</td>
-              <td>65.40</td>
-              <td>68.32</td>
-              <td>47.22</td>
-              <td>91.80</td>
-            </tr>
-          </tbody>
-        </table>
+        <p><strong>Question:</strong> Among renewable sources costing &le; 50/MWh and scalability &ge; 3, which is most
+          efficient, and what is its efficiency?</p>
+        <p>
+          <strong>Reasoning:</strong>
+          <span class="reason-step step-1">Step 1: Cost Filter</span> &rarr; Keep Solar, Wind.
+          <span class="reason-step step-2">Step 2: Scalability Filter</span> &rarr; Keep Solar, Wind.
+          <span class="reason-step step-3">Step 3: Efficiency Selection</span> &rarr; Choose Wind (30-45%).
+        </p>
+        <p class="traceback-tags">
+          <span class="tag trace-tag-1">S1: Cost &le; 50</span>
+          <span class="tag trace-tag-2">S2: Scalability &ge; 3</span>
+          <span class="tag trace-tag-3">S3: Max Efficiency</span>
+        </p>
+        <p><strong>Answer:</strong> Wind Power, 30-45% efficiency.</p>
       </div>
     </div>
-  </div>
-</section>
+  </section>
 
-<section class="section" id="fairscore">
-  <div class="container is-max-desktop">
-    <h2 class="title is-3">How Can We Evaluate Attribution Without New Human Labels?</h2>
-    <div class="content has-text-justified">
-      <p>
-        TraceBack also introduces <strong>FairScore</strong>, a referenceless metric that compares atomic facts extracted from predicted cells with atomic facts extracted from answers.
-        This supports scalable evaluation when gold cell labels are limited.
-      </p>
-      <p>
-        FairScore preserves relative method ordering and separates strong and weak attribution models, while keeping evaluation practical on larger silver subsets.
-      </p>
-    </div>
+  <section class="section" id="approach">
+    <div class="container is-max-desktop">
+      <h2 class="title is-3">How Does TraceBack Reconstruct a Reasoning Chain Step by Step?</h2>
+      <div class="content has-text-justified">
+        <p>
+          Rather than attributing evidence in one shot, TraceBack decomposes the attribution process into coordinated
+          agent steps so each stage remains interpretable and scalable.
+        </p>
+      </div>
 
-    <div class="box elevated content has-text-centered">
-      <img src="./static/images/traceback_fairscore_top.png" alt="FairScore reference-less evaluation concept" style="max-width: 100%;" />
-      <p class="media-caption">
-        FairScore concept: convert cell evidence and answers into atomic facts, then align them to estimate precision and recall.
-      </p>
-    </div>
-    <div class="box elevated content has-text-centered">
-      <img src="./static/images/eval_metric_analysis.png" alt="FairScore reference-less evaluation concept" style="max-width: 100%;" />
-      <p class="media-caption">
-        Systematic analysis of the metric - FAIRSCORE
-      </p>
-    </div>
+      <div class="box elevated content">
+        <ol>
+          <li><strong>Column relevance identification:</strong> find columns needed for the answer, including implicit
+            columns for intermediate reasoning.</li>
+          <li><strong>Evidence span extraction:</strong> prune the table to rows that still preserve the reasoning path.
+          </li>
+          <li><strong>Query decomposition:</strong> split the original question into sub-questions aligned with
+            intermediate steps.</li>
+          <li><strong>Sub-query attribution:</strong> map each sub-question to minimal evidence cells.</li>
+          <li><strong>Final attribution:</strong> merge evidence into a coherent final set of supporting cells.</li>
+        </ol>
+      </div>
 
-    <div class="box elevated content" style="margin-top: 2rem;">
-      <h4 class="title is-4 has-text-centered">FairScore-Based Cell-Level Estimates on Gold Sets</h4>
-      <div class="table-container">
-        <table class="table is-bordered is-striped is-hoverable is-fullwidth">
-          <thead>
-            <tr>
-              <th>Method</th>
-              <th>ToTTo (P / R)</th>
-              <th>FetaQA (P / R)</th>
-              <th>AITQA (P / R)</th>
-            </tr>
-          </thead>
-          <tbody>
-            <tr>
-              <td>Few-shot + CoT</td>
-              <td>30.81 / 13.25</td>
-              <td>15.67 / 17.73</td>
-              <td>11.73 / 6.69</td>
-            </tr>
-            <tr>
-              <td>SBERT + GPT-4o</td>
-              <td>20.51 / 16.84</td>
-              <td>20.05 / 21.87</td>
-              <td>4.51 / 5.47</td>
-            </tr>
-            <tr>
-              <td>INSEQ</td>
-              <td>16.85 / 18.95</td>
-              <td>15.48 / 17.94</td>
-              <td>10.99 / 16.53</td>
-            </tr>
-            <tr>
-              <td>GenerationPrograms</td>
-              <td>14.96 / 11.32</td>
-              <td>16.04 / 14.13</td>
-              <td>7.62 / 3.77</td>
-            </tr>
-            <tr>
-              <td>TraceBack-Lite</td>
-              <td>53.87 / 40.20</td>
-              <td>51.88 / 45.12</td>
-              <td><strong>63.44 / 55.13</strong></td>
-            </tr>
-            <tr style="background-color: #d1f7d1; border: 2px solid #006400;">
-              <td><strong>TraceBack (full)</strong></td>
-              <td><strong>56.89 / 48.39</strong></td>
-              <td><strong>63.73 / 64.15</strong></td>
-              <td>42.20 / 49.93</td>
-            </tr>
-          </tbody>
-        </table>
+      <div class="box elevated content has-text-centered">
+        <img src="./static/images/traceback_pipeline_clean.png" alt="TraceBack multi-agent pipeline"
+          style="max-width: 520px; width: 100%;" />
+        <p class="media-caption">
+          Pipeline overview: a modular attribution workflow from relevant schema discovery to final cell-level
+          grounding.
+        </p>
       </div>
     </div>
-  </div>
-</section>
+  </section>
 
-<!-- <section class="section" id="takeaways">
+  <section class="section" id="benchmark">
+    <div class="container is-max-desktop">
+      <h2 class="title is-3">How Was the Benchmark Designed for Fine-Grained Attribution?</h2>
+      <div class="content has-text-justified">
+        <p>
+          To evaluate attribution quality systematically, TraceBack introduces <strong>CITEBENCH</strong>, combining
+          manual phrase-to-cell annotations with larger silver subsets.
+          The benchmark is built from ToTTo, FetaQA, and AITQA, with a 1,500-example gold set for precise analysis.
+        </p>
+      </div>
+
+      <div class="box elevated content has-text-centered">
+        <div class="level">
+          <div class="level-item has-text-centered">
+            <div>
+              <p class="heading">Gold Examples</p>
+              <p class="title">1,500</p>
+            </div>
+          </div>
+          <div class="level-item has-text-centered">
+            <div>
+              <p class="heading">Datasets</p>
+              <p class="title">3</p>
+            </div>
+          </div>
+          <div class="level-item has-text-centered">
+            <div>
+              <p class="heading">IAA (Cohen's kappa)</p>
+              <p class="title">0.72</p>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="box elevated content" style="margin-top: 2rem;">
+        <h4 class="title is-4 has-text-centered">Benchmark Composition</h4>
+        <div class="table-container">
+          <table class="table is-bordered is-striped is-hoverable is-fullwidth">
+            <thead>
+              <tr>
+                <th>Dataset</th>
+                <th>Total</th>
+                <th>Gold Set (Human)</th>
+                <th>Silver Set (Original)</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td><strong>ToTTo</strong></td>
+                <td>7,700</td>
+                <td>500</td>
+                <td>7,200</td>
+              </tr>
+              <tr>
+                <td><strong>FetaQA</strong></td>
+                <td>3,004</td>
+                <td>500</td>
+                <td>2,504</td>
+              </tr>
+              <tr>
+                <td><strong>AITQA</strong></td>
+                <td>513</td>
+                <td>513</td>
+                <td>-</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+        <p class="media-caption">
+          CITEBENCH statistics reported in the paper (Table 2).
+        </p>
+      </div>
+    </div>
+  </section>
+
+  <section class="section" id="results">
+    <div class="container is-max-desktop">
+      <h2 class="title is-3">What Do the Experiments Reveal About Attribution Quality?</h2>
+      <div class="content has-text-justified">
+        <p>
+          Across ToTTo, FetaQA, and AITQA, the paper reports attribution quality at row, column, and cell levels.
+          Viewing all three granularities together reveals how each method behaves from coarse evidence localization to
+          fine-grained grounding.
+        </p>
+      </div>
+
+      <div class="box elevated content has-text-centered">
+        <h3 class="title is-4">Attribution performance across granularities and datasets</h3>
+        <div class="table-container">
+          <table class="table is-bordered is-striped is-hoverable is-fullwidth results-full-table">
+            <thead>
+              <tr>
+                <th>Method</th>
+                <th>ToTTo<br>Precision</th>
+                <th>ToTTo<br>Recall</th>
+                <th>FetaQA<br>Precision</th>
+                <th>FetaQA<br>Recall</th>
+                <th>AITQA<br>Precision</th>
+                <th>AITQA<br>Recall</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td colspan="7" class="level-row row-level"><em>Row-Level Attribution</em></td>
+              </tr>
+              <tr>
+                <td>SBERT + GPT-4o</td>
+                <td>43.38</td>
+                <td>39.09</td>
+                <td>57.02</td>
+                <td>55.40</td>
+                <td>66.82</td>
+                <td>68.10</td>
+              </tr>
+              <tr>
+                <td>GenerationPrograms</td>
+                <td>50.00</td>
+                <td>31.28</td>
+                <td>75.00</td>
+                <td>40.06</td>
+                <td>59.68</td>
+                <td>71.90</td>
+              </tr>
+              <tr>
+                <td>Fewshot + CoT</td>
+                <td>17.30</td>
+                <td>12.80</td>
+                <td>34.40</td>
+                <td>30.10</td>
+                <td>04.30</td>
+                <td>04.30</td>
+              </tr>
+              <tr>
+                <td>INSEQ</td>
+                <td>37.50</td>
+                <td><u>74.50</u></td>
+                <td>56.40</td>
+                <td><u>84.70</u></td>
+                <td>31.20</td>
+                <td><strong>97.60</strong></td>
+              </tr>
+              <tr>
+                <td>TraceBack - Lite</td>
+                <td><strong>77.00</strong></td>
+                <td>62.60</td>
+                <td><u>83.00</u></td>
+                <td>79.20</td>
+                <td><u>91.30</u></td>
+                <td>92.90</td>
+              </tr>
+              <tr>
+                <td><strong>TraceBack</strong></td>
+                <td><u>71.19</u></td>
+                <td><strong>80.38</strong></td>
+                <td><strong>94.30</strong></td>
+                <td><strong>93.36</strong></td>
+                <td><strong>96.65</strong></td>
+                <td><u>97.12</u></td>
+              </tr>
+
+              <tr>
+                <td colspan="7" class="level-row column-level"><em>Column-Level Attribution</em></td>
+              </tr>
+              <tr>
+                <td>SBERT + GPT-4o</td>
+                <td>90.51</td>
+                <td><strong>85.91</strong></td>
+                <td>94.67</td>
+                <td><strong>84.77</strong></td>
+                <td>46.68</td>
+                <td>97.14</td>
+              </tr>
+              <tr>
+                <td>GenerationPrograms</td>
+                <td>71.81</td>
+                <td>24.71</td>
+                <td>78.42</td>
+                <td>20.00</td>
+                <td>49.86</td>
+                <td>83.81</td>
+              </tr>
+              <tr>
+                <td>Fewshot + CoT</td>
+                <td><strong>92.70</strong></td>
+                <td>76.40</td>
+                <td>95.80</td>
+                <td>67.30</td>
+                <td>47.50</td>
+                <td>94.30</td>
+              </tr>
+              <tr>
+                <td>INSEQ</td>
+                <td>73.10</td>
+                <td>74.10</td>
+                <td>82.60</td>
+                <td>65.50</td>
+                <td>34.70</td>
+                <td><strong>99.98</strong></td>
+              </tr>
+              <tr>
+                <td>TraceBack - Lite</td>
+                <td>88.60</td>
+                <td>48.90</td>
+                <td><u>94.70</u></td>
+                <td>54.80</td>
+                <td><strong>79.20</strong></td>
+                <td>85.30</td>
+              </tr>
+              <tr>
+                <td><strong>TraceBack</strong></td>
+                <td><u>91.50</u></td>
+                <td><u>77.64</u></td>
+                <td><strong>96.39</strong></td>
+                <td><u>83.07</u></td>
+                <td><u>54.09</u></td>
+                <td><u>98.09</u></td>
+              </tr>
+
+              <tr>
+                <td colspan="7" class="level-row cell-level"><em>Cell-Level Attribution</em></td>
+              </tr>
+              <tr>
+                <td>SBERT + GPT-4o</td>
+                <td>39.78</td>
+                <td>36.97</td>
+                <td>52.08</td>
+                <td>46.16</td>
+                <td>31.96</td>
+                <td>66.67</td>
+              </tr>
+              <tr>
+                <td>GenerationPrograms</td>
+                <td>29.35</td>
+                <td>13.61</td>
+                <td>50.78</td>
+                <td>15.74</td>
+                <td>30.32</td>
+                <td>67.14</td>
+              </tr>
+              <tr>
+                <td>Fewshot + CoT</td>
+                <td>14.50</td>
+                <td>10.10</td>
+                <td>27.40</td>
+                <td>17.80</td>
+                <td>02.20</td>
+                <td>04.30</td>
+              </tr>
+              <tr>
+                <td>INSEQ</td>
+                <td>42.70</td>
+                <td><u>53.80</u></td>
+                <td>56.50</td>
+                <td><u>44.20</u></td>
+                <td>19.20</td>
+                <td><strong>97.10</strong></td>
+              </tr>
+              <tr>
+                <td>TraceBack - Lite</td>
+                <td><u>73.80</u></td>
+                <td>39.60</td>
+                <td><u>75.40</u></td>
+                <td>42.30</td>
+                <td><strong>73.70</strong></td>
+                <td>80.60</td>
+              </tr>
+              <tr>
+                <td><strong>TraceBack</strong></td>
+                <td><strong>74.20</strong></td>
+                <td><strong>67.05</strong></td>
+                <td><strong>89.81</strong></td>
+                <td><strong>78.84</strong></td>
+                <td><u>52.37</u></td>
+                <td><u>95.22</u></td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+        <p class="media-caption">
+          Precision and recall for row-, column-, and cell-level attribution on ToTTo, FetaQA, and AITQA. Blocks
+          correspond to different granularities. For each dataset–granularity pair, bold best method; underline marks
+          second best.
+        </p>
+      </div>
+
+      <div class="box elevated content">
+        <h4 class="title is-4">What Changes When We Simplify TraceBack?</h4>
+        <p>
+          Removing query decomposition produces the largest quality drop, which suggests that surfacing intermediate
+          reasoning steps is central to accurate cell-level grounding.
+          Table pruning also matters: it typically reduces noise and improves attribution efficiency while preserving
+          evidence coverage.
+        </p>
+        <div class="table-container" style="margin-top: 1rem;">
+          <table class="table is-bordered is-striped is-hoverable is-fullwidth ablation-table">
+            <thead>
+              <tr>
+                <th>Method</th>
+                <th>ToTTo<br>Precision</th>
+                <th>ToTTo<br>Recall</th>
+                <th>FetaQA<br>Precision</th>
+                <th>FetaQA<br>Recall</th>
+                <th>AITQA<br>Precision</th>
+                <th>AITQA<br>Recall</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td colspan="7" class="ablation-group"><em>Variants of TraceBack</em></td>
+              </tr>
+              <tr>
+                <td>Query Decomposition before Table Pruning</td>
+                <td>63.00</td>
+                <td>60.15</td>
+                <td>71.23</td>
+                <td>75.10</td>
+                <td>85.38</td>
+                <td>92.89</td>
+              </tr>
+              <tr>
+                <td>Passing One Subquery at a Time</td>
+                <td>61.32</td>
+                <td>60.10</td>
+                <td>69.67</td>
+                <td>73.33</td>
+                <td><strong>85.95</strong></td>
+                <td>92.00</td>
+              </tr>
+              <tr class="ablation-main-row">
+                <td><strong>TraceBack</strong></td>
+                <td><strong>74.20</strong></td>
+                <td><strong>67.05</strong></td>
+                <td><strong>89.81</strong></td>
+                <td><strong>78.84</strong></td>
+                <td>52.37</td>
+                <td><strong>95.22</strong></td>
+              </tr>
+              <tr>
+                <td colspan="7" class="ablation-group"><em>Ablation Study on TraceBack</em></td>
+              </tr>
+              <tr class="ablation-main-row">
+                <td><strong>TraceBack</strong></td>
+                <td><strong>74.20</strong></td>
+                <td><strong>67.05</strong></td>
+                <td><strong>89.81</strong></td>
+                <td><strong>78.84</strong></td>
+                <td>52.37</td>
+                <td><strong>95.22</strong></td>
+              </tr>
+              <tr>
+                <td>- w/o Table Pruning</td>
+                <td>73.14</td>
+                <td>60.10</td>
+                <td>72.89</td>
+                <td>75.78</td>
+                <td><strong>86.33</strong></td>
+                <td>93.10</td>
+              </tr>
+              <tr>
+                <td>- w/o Query Decomposition</td>
+                <td>56.00</td>
+                <td>56.30</td>
+                <td>65.40</td>
+                <td>68.32</td>
+                <td>47.22</td>
+                <td>91.80</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="section" id="fairscore">
+    <div class="container is-max-desktop">
+      <h2 class="title is-3">How Can We Evaluate Attribution Without New Human Labels?</h2>
+      <div class="content has-text-justified">
+        <p>
+          TraceBack also introduces <strong>FairScore</strong>, a referenceless metric that compares atomic facts
+          extracted from predicted cells with atomic facts extracted from answers.
+          This supports scalable evaluation when gold cell labels are limited.
+        </p>
+        <p>
+          FairScore preserves relative method ordering and separates strong and weak attribution models, while keeping
+          evaluation practical on larger silver subsets.
+        </p>
+      </div>
+
+      <div class="box elevated content has-text-centered">
+        <img src="./static/images/traceback_fairscore_top.png" alt="FairScore reference-less evaluation concept"
+          style="max-width: 100%;" />
+        <p class="media-caption">
+          FairScore concept: convert cell evidence and answers into atomic facts, then align them to estimate precision
+          and recall.
+        </p>
+      </div>
+      <div class="box elevated content has-text-centered">
+        <img src="./static/images/eval_metric_analysis.png" alt="FairScore reference-less evaluation concept"
+          style="max-width: 100%;" />
+        <p class="media-caption">
+          Systematic analysis of the metric - FAIRSCORE
+        </p>
+      </div>
+
+      <div class="box elevated content" style="margin-top: 2rem;">
+        <h4 class="title is-4 has-text-centered">FairScore-Based Cell-Level Estimates on Gold Sets</h4>
+        <div class="table-container">
+          <table class="table is-bordered is-striped is-hoverable is-fullwidth">
+            <thead>
+              <tr>
+                <th>Method</th>
+                <th>ToTTo (P / R)</th>
+                <th>FetaQA (P / R)</th>
+                <th>AITQA (P / R)</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>Few-shot + CoT</td>
+                <td>30.81 / 13.25</td>
+                <td>15.67 / 17.73</td>
+                <td>11.73 / 6.69</td>
+              </tr>
+              <tr>
+                <td>SBERT + GPT-4o</td>
+                <td>20.51 / 16.84</td>
+                <td>20.05 / 21.87</td>
+                <td>4.51 / 5.47</td>
+              </tr>
+              <tr>
+                <td>INSEQ</td>
+                <td>16.85 / 18.95</td>
+                <td>15.48 / 17.94</td>
+                <td>10.99 / 16.53</td>
+              </tr>
+              <tr>
+                <td>GenerationPrograms</td>
+                <td>14.96 / 11.32</td>
+                <td>16.04 / 14.13</td>
+                <td>7.62 / 3.77</td>
+              </tr>
+              <tr>
+                <td>TraceBack-Lite</td>
+                <td>53.87 / 40.20</td>
+                <td>51.88 / 45.12</td>
+                <td><strong>63.44 / 55.13</strong></td>
+              </tr>
+              <tr style="background-color: #d1f7d1; border: 2px solid #006400;">
+                <td><strong>TraceBack (full)</strong></td>
+                <td><strong>56.89 / 48.39</strong></td>
+                <td><strong>63.73 / 64.15</strong></td>
+                <td>42.20 / 49.93</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- <section class="section" id="takeaways">
   <div class="container is-max-desktop">
     <h2 class="title is-3">What Should We Take Away from This Project?</h2>
     <div class="box elevated content has-text-justified">
@@ -638,12 +667,12 @@
   </div>
 </section> -->
 
-<a class="back-to-top button is-link is-light is-rounded" href="#top" aria-label="Back to top">
-  <span class="icon"><i class="fas fa-arrow-up"></i></span>
-  <span>Top</span>
-</a>
+  <a class="back-to-top button is-link is-light is-rounded" href="#top" aria-label="Back to top">
+    <span class="icon"><i class="fas fa-arrow-up"></i></span>
+    <span>Top</span>
+  </a>
 
-<!-- <section class="section" id="BibTeX">
+  <!-- <section class="section" id="BibTeX">
   <div class="container is-max-desktop content">
     <h2 class="title">BibTeX</h2>
     <div class="box elevated">
@@ -658,25 +687,27 @@
   </div>
 </section> -->
 
-<footer class="footer">
-  <div class="container">
-    <div class="content has-text-centered">
-      <a class="icon-link" href="./Traceback_TACL.pdf">
-        <i class="fas fa-file-pdf"></i>
-      </a>
-      <a class="icon-link" href="#" aria-disabled="true">
-        <i class="fab fa-github"></i>
-      </a>
-    </div>
-    <div class="columns is-centered">
-      <div class="column is-8">
-        <div class="content has-text-centered">
-          <p>Page source code was adapted from <a href="https://nerfies.github.io/" target="_blank" rel="noopener">here</a>.</p>
+  <footer class="footer">
+    <div class="container">
+      <div class="content has-text-centered">
+        <a class="icon-link" href="./Traceback_TACL.pdf">
+          <i class="fas fa-file-pdf"></i>
+        </a>
+        <a class="icon-link" href="#" aria-disabled="true">
+          <i class="fab fa-github"></i>
+        </a>
+      </div>
+      <div class="columns is-centered">
+        <div class="column is-8">
+          <div class="content has-text-centered">
+            <p>Page source code was adapted from <a href="https://nerfies.github.io/" target="_blank"
+                rel="noopener">here</a>.</p>
+          </div>
         </div>
       </div>
     </div>
-  </div>
-</footer>
+  </footer>
 
 </body>
+
 </html>

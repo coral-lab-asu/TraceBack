@@ -1,0 +1,34 @@
+# Secrets
+.env
+.env.*
+!.env.example
+
+# Python cache/artifacts
+__pycache__/
+*.py[cod]
+*.pyo
+*.pyd
+*.so
+
+# Tool caches
+.pytest_cache/
+.mypy_cache/
+.ruff_cache/
+.ipynb_checkpoints/
+
+# OS / editor
+.DS_Store
+.vscode/
+.history/
+
+# Logs
+*.log
+Code/logs/
+Code_with_rows/logs/
+
+# Experiment outputs (regenerable)
+results/
+fetaqa_results/
+totto_results/
+aitqa_answer_attribution_*.json
+*.bak

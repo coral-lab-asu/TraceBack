@@ -1,0 +1,24 @@
+You will be given table title, column names, question and answer. You need to find all the columns in column names, which are relevant to question and answer.
+
+<Example-1> : 
+
+Input :
+
+<Table Title>: "Kings Time Duration Info"
+
+<Column Names>: ["King Name", "Start of the Reign", "End of the Reign", "Duration", "Kingdom"]
+
+Question : "How long did king Rajat held the throne and when it ended?"
+Answer : "King Rajat held the throne for 10 years and it ended at 1777." :
+
+
+Final Answer : 
+<Relevant Columns>: ["Duration","End of the Reign"]
+
+</Example-1>
+
+<Instructions>
+1. Follow the given format for the final answer.
+2. Don't miss any relevant columns.
+
+Now, give output for the following inputs.

@@ -1,0 +1,110 @@
+TraceBack MySQL (user-local) start/stop
+======================================
+
+TraceBack Step 2 (Evidence Span Extractor) uses a real MySQL server via
+`Code_with_rows/database.py`. On this cluster, MySQL is provided as a module:
+
+  mysql-8.0.19-aocc-3.1.0
+
+This guide starts a user-local MySQL instance bound to 127.0.0.1:3307 and stores
+data under ~/.traceback_mysql/.
+
+
+0) Load MySQL module
+--------------------
+
+  module load mysql-8.0.19-aocc-3.1.0
+
+Confirm:
+
+  which mysql
+  which mysqld
+
+
+1) One-time initialization (first run only)
+-------------------------------------------
+
+  export TB_MYSQL_HOME="$HOME/.traceback_mysql"
+  mkdir -p "$TB_MYSQL_HOME"/{data,run,log,tmp}
+
+Only if the data dir is not initialized yet:
+
+  if [ ! -d "$TB_MYSQL_HOME/data/mysql" ]; then
+    mysqld --initialize-insecure \
+      --datadir="$TB_MYSQL_HOME/data" \
+      --tmpdir="$TB_MYSQL_HOME/tmp"
+  fi
+
+
+2) Start MySQL (bind 127.0.0.1:3307)
+------------------------------------
+
+  export TB_MYSQL_HOME="$HOME/.traceback_mysql"
+  mkdir -p "$TB_MYSQL_HOME"/{run,log,tmp}
+
+  # Clean up stale files (common after node disconnects)
+  rm -f "$TB_MYSQL_HOME/run/mysql.sock" \
+        "$TB_MYSQL_HOME/run/mysql.sock.lock" \
+        "$TB_MYSQL_HOME/run/mysql.pid"
+
+  mysqld \
+    --datadir="$TB_MYSQL_HOME/data" \
+    --socket="$TB_MYSQL_HOME/run/mysql.sock" \
+    --pid-file="$TB_MYSQL_HOME/run/mysql.pid" \
+    --log-error="$TB_MYSQL_HOME/log/mysqld.err" \
+    --port=3307 \
+    --bind-address=127.0.0.1 \
+    --skip-networking=0 \
+    --mysqlx=0 \
+    --tmpdir="$TB_MYSQL_HOME/tmp" \
+    --daemonize
+
+Wait until it is ready:
+
+  mysqladmin -uroot --socket="$TB_MYSQL_HOME/run/mysql.sock" ping
+
+If it doesn't come up, check:
+
+  tail -n 50 "$TB_MYSQL_HOME/log/mysqld.err"
+
+
+3) Create DB + sanity check
+---------------------------
+
+  mysql --protocol=TCP -h127.0.0.1 -P3307 -uroot -e \
+    "CREATE DATABASE IF NOT EXISTS text2sql; SHOW DATABASES;"
+
+You should see "text2sql".
+
+
+4) Env vars for TraceBack code
+------------------------------
+
+`Code_with_rows/database.py` reads these:
+
+  export TRACEBACK_MYSQL_HOST=127.0.0.1
+  export TRACEBACK_MYSQL_PORT=3307
+  export TRACEBACK_MYSQL_DB=text2sql
+  export TRACEBACK_MYSQL_USER=root
+  export TRACEBACK_MYSQL_PASSWORD=
+
+
+5) Stop MySQL
+-------------
+
+Preferred (works even when TCP root user can't SHUTDOWN):
+
+  mysqladmin -uroot --socket="$TB_MYSQL_HOME/run/mysql.sock" shutdown
+
+Fallback (kill by pid file):
+
+  kill "$(cat "$TB_MYSQL_HOME/run/mysql.pid")"
+
+
+Notes
+-----
+- Run MySQL on the same machine where you run TraceBack.
+  (If you use Slurm, start MySQL inside the same job allocation.)
+- Port 3307 is just a convention; change it if it’s already in use, and update
+  TRACEBACK_MYSQL_PORT accordingly.
+

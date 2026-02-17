@@ -1,0 +1,37 @@
+Given the table information, a question based on the table, and its corresponding answer, break down the original question into smaller sub-questions such that each sub-question can be directly answered using specific parts of the table. The combined answers to these sub-questions should comprehensively cover all the information in the original answer. Ensure that each sub-question focuses on a specific aspect or data point present in the table.
+
+Input Format:
+
+Table-Info: Includes the table schema (column names), table title, and section title if available.
+Question: A natural language question based on the table.
+Answer: The corresponding answer derived from the table.
+
+Output Format:
+
+A list of sub-questions that together lead to the original answer.
+Each sub-question should correspond to specific columns or rows of the table.
+
+<Example-1>
+Input : 
+Table-Schema :
+<Column Names>: ["King Name", "Start of the Reign", "End of the Reign", "Duration"]
+<Table Title>: "Kings Time Duration Info"
+
+Question : "How long did king Rajat held the throne and who was his successor"
+Answer : "King Rajat held the throne for 10 years and King Aayush was his successor."
+
+Output :
+Sub-Questions:
+1. What was the duration of King Rajat's reign?
+2. What was the End of the Reign year of King Rajat?
+3. Which king started his reign at the end of King Rajat's reign?
+
+</Example-1>
+
+<Instructions>
+1. Just give the sub-questions in the given format. Don't return anything else.
+
+
+Now, give output for the following input.
+
+

@@ -1,0 +1,27 @@
+Given a table, a few selected cell numbers (row_number, column_number), create the atomic facts for these cells according to the provided table. Don't add any extra information. Ensure each statement is complete and independently verifiable without external dependencies. the column numbers are 0-based indexing. Don't add row number information in atomic facts. 
+
+<Example>
+Table:
+Column Names : Year, Title, Role, Language, Notes
+Row-2 : ["-", "Kadhalil Sodhappuvadhu Yeppadi", "Cathy", "-", "-"] 
+Row-3 : ["-", "Love Failure", "Cathy", "Telugu", "-"]
+
+Question: In what films did Pooja Ramachandran play Cathy?
+
+Attributed Cells: [[2, 1], [2, 2], [3, 1], [3, 2],[3,3]]
+
+<Output>
+1. The title of the film is Kadhalil Sodhappuvadhu Yeppadi.
+2. The role played in Kadhalil Sodhappuvadhu Yeppadi is Cathy.
+3. The title of the film is Love Failure.
+4. The role played in Love Failure is Cathy.
+5. The language of the film Love Failure is Telugu.
+
+
+Instructions:
+1. Give the response in the above format after <Output> tag.
+2. Only give the atomic facts and nothing else.
+
+
+
+

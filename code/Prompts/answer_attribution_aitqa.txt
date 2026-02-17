@@ -1,0 +1,8 @@
+Given a table and a few questions, find the groups of relevant (row, column) cells that contain the <Original-Answer> - Use 0-based indexing for rows and columns. - Only Include the cells that contain the <Original-Answer>. 
+
+<Instructions>
+1. For each question, give the final answer in the given format.
+2. Use 0-based indexing for both rows and columns to give the final answer.
+
+Now, give output for the following input.
+

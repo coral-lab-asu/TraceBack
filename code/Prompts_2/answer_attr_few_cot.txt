@@ -1,0 +1,41 @@
+Given a table and a few questions, find the groups of relevant (row, column) cells that are relevant to each phrase of the question, as well as the answer to the question. - Use 0-based indexing for rows and columns. - Include the cells that are necessary to reconstruct the <Original-Answer> and the question in <Questions> (also it's respective answer).
+
+<Example-1>
+
+Input :
+<Relevant-Columns> : ["King","Start of Reign","End of Reign","Total Duration"]
+<Table-Rows> : [["Devanshu","1901","1998","98 Years"],["Poojah","1999","2100","101"],["Rajat","2111","2211","100"]]
+
+<Questions> :
+1. What was the duration of King Poojah's reign?
+2. What was the End of the Reign year of King Poojah?
+3. Which king started his reign at the end of King Poojah's reign?
+
+<Original-Answer> :
+King Poojah reigned for 101 Years. The next king to reign afterward was King Rajat, who started his reign in 2111.
+
+<Final Answer>
+1. [(1,0),(1,3)]
+2. [(1,0),(1,2)]
+3. [(1,0),(2,0),(2,1)]
+
+Output Explanation:
+- We include the subject row cell (1,0) for identifying “Poojah”, and the supporting cell (1,3) for “101 Years”.
+- For Q2 we include (1,0) as the row identifier and (1,2) for the End of Reign.
+- For Q3 we include (1,0) for Poojah’s row, (2,0) to identify “Rajat”, and (2,1) for his start year 2111.
+
+<Instructions>
+1. Briefly reason first in 1–3 short lines, but do not use any parentheses or tuple-like text in the reasoning.
+2. Then output the final per-question answer lines. Only these lines may contain parentheses.
+3. Use 0-based indexing. Rows index the table body (header excluded); columns index the header; deduplicate tuples and avoid unrelated cells.
+
+Now, give output for the following input.
+
+Output Format (EXACT)
+- There is exactly one question. Output exactly one line containing only a single list of tuples.
+- The line must start with `[` and end with `]` and contain only integer pairs in parentheses.
+- Do not output any other text, labels, bullets, or explanations.
+- If no cells apply, output `[]` only.
+
+Example:
+[(3,2), (3,4)]

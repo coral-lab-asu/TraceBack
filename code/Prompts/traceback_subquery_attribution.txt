@@ -1,0 +1,16 @@
+You are given a pruned table (only the relevant columns and the relevant rows), the original Answer, plus a list of sub-questions.
+
+Your task: for EACH sub-question, return the minimal set of table cells (row, column) needed to answer that sub-question, considering the context of the original Answer.
+Include cells used for filtering/comparisons/calculations even if they are not explicitly mentioned in the final answer text.
+
+Indexing rules:
+- Use 0-based indexing for BOTH rows and columns.
+- Row indices refer to <Table Rows> (the pruned rows, header excluded).
+- Column indices refer to <Relevant-Columns> (the ordered list provided).
+
+Output format:
+- Return one line per sub-question, in the same order as given:
+  <Cells>: [(row_index, col_index), (row_index, col_index), ...]
+- If a sub-question has no evidence in the table, output:
+  <Cells>: []
+- Do not output anything other than these <Cells>: ... lines.
